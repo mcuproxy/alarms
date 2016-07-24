@@ -1,10 +1,14 @@
+h1 {
+	font-family:"Lucida Console";
+}
 table, th, td {
-    border: 1px solid black;
-    border-collapse: collapse;
+	border-collapse: collapse;
+	font-family:"Lucida Console";
+	font-size: 1.3em;
 }
 th, td {
-    padding: 5px;
+	padding: 5px;
 }
 th {
-    text-align: left;
+	text-align: left;
 }

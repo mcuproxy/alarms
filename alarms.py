@@ -2,15 +2,14 @@
 # -*- coding: utf-8 -*-
 
 import psycopg2
-from flask import Flask, render_template
-app = Flask(__name__)
+from jinja2 import Template
 
 
 def get_db_data():
     conn = psycopg2.connect(dbname="mcu", user="user", host="localhost", password="user")
     cur = conn.cursor()
     sql_cmd = "SELECT * FROM alarm_hist \
-                WHERE id > (SELECT max(id) FROM alarm_hist) - 2000;"
+                WHERE id > (SELECT max(id) FROM alarm_hist) - 1000;"
     cur.execute(sql_cmd)
     result_raw = cur.fetchall()
     conn.close()
@@ -20,10 +19,14 @@ def get_db_data():
     else:
         return []
 
-@app.route('/')
-def index():
+def make_index():
     alarms = get_db_data()
-    return render_template('index.html', alarms=alarms)
+    
+    with open("template.html", 'r') as f:
+        template = Template(f.read())
+        
+    with open("index.html", 'w') as f:
+        f.write(template.render(alarms=alarms))
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000, debug=True)
+    make_index()
